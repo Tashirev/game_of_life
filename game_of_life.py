@@ -14,8 +14,8 @@ def main():
     ax = fig.add_subplot()
 
     frames = []
-    img = ax.imshow(space.cells_life_status())
-    frames.append([img])
+    # img = ax.imshow(space.cells_life_status())
+    # frames.append([img])
     for _ in range(100):
         space.recalculation_neighbours()
         space.new_epoch()
