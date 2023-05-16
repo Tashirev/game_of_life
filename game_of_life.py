@@ -1,9 +1,10 @@
 import random
 import numpy as np
-import seaborn as sns
-import time
+import matplotlib
+matplotlib.use("TkAgg")
 import matplotlib.pyplot as plt
-from matplotlib.animation import FuncAnimation
+from matplotlib.animation import FuncAnimation, ArtistAnimation
+
 
 
 
@@ -148,30 +149,29 @@ class Space:
         self.epoch += 1
 
 
-space = Space([40,40], False)
+space = Space([100,100], False)
 space.random_first_generation([5,1])
 
-plt.ion()
-plt.imshow(space.cells_life_status())
-plt.pause(0.1)
+fig = plt.figure()
+ax = fig.add_subplot()
 
-for _ in range (50):
-
-    print(f'Epoch: {space.epoch}')
+frames = []
+img = ax.imshow(space.cells_life_status())
+frames.append([img])
+for _ in range (1000):
     space.recalculation_neighbours()
     space.new_epoch()
-    plt.imshow(space.cells_life_status())
-    plt.pause(0.2)
 
+    img = ax.imshow(space.cells_life_status())
+    frames.append([img])
 
-# plt.ion()
-# for _ in range(10):
-#     space.recalculation_neighbours()
-#     space.new_epoch()
-#     plt.clf()
-#     plt.imshow(space.cells_life_status())
-#     plt.draw()
-#     plt.gcf().canvas.flush_events()
-#     time.sleep(1)
-# plt.ioff()
-# plt.show()
+animation = ArtistAnimation(
+    fig,
+    frames,
+    interval=100,
+    blit=True,
+    repeat=True)
+
+animation.save('game_of_life.gif', writer='imagemagick', fps=6)
+
+plt.show()
